@@ -1,0 +1,33 @@
+Currency,JPY
+Base Date,8-Mar-07
+Days to Spot,2
+Cash Basis,ACT/360
+Futures Basis,ACT/360
+Swaps Basis,ACT/365
+Swaps Freq,Semi-Annually
+Holiday,TOK
+Cash,ON,0.0057000
+Cash,TN,0.0057000
+Cash,3M,0.0070625
+Futures,22-Mar-07,99.307
+Futures,20-Jun-07,99.3082
+Futures,19-Sep-07,99.2235
+Futures,19-Dec-07,99.1369
+Futures,19-Mar-08,99.0504
+Futures,18-Jun-08,98.968
+Futures,17-Sep-08,98.8927
+Futures,17-Dec-08,98.8175
+Swaps,3Y,0.0105625
+Swaps,4Y,0.0118750
+Swaps,5Y,0.0130750
+Swaps,6Y,0.0141375
+Swaps,7Y,0.0150875
+Swaps,8Y,0.0159750
+Swaps,9Y,0.0168000
+Swaps,10Y,0.0175750
+Swaps,12Y,0.0189125
+Swaps,15Y,0.0204875
+Swaps,20Y,0.0223250
+Swaps,25Y,0.0234625
+Swaps,30Y,0.0241375
+Swaps,40Y,0.0249375
