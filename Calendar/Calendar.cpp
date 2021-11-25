@@ -1,7 +1,7 @@
-#include "Calendar.h"
+ï»¿#include "Calendar.h"
 #include <cstring>
 #include <cstdlib>
-using namespace std;    //ĞÂ¼ÓµÄ
+using namespace std;    //ï¿½Â¼Óµï¿½
 
 #define maxLineSize	80
 
@@ -17,11 +17,11 @@ Calendar::roll(date& dt)
 		}
 		return SUCCESS;
 	}
-	return FAILURE;    //ÕâÀïÊ²Ã´Çé¿öreturn FAILURE°¡??
+	return FAILURE;    //è¿™é‡Œä»€ä¹ˆæƒ…å†µreturn FAILUREå•Š??
 }
 
 bool
-Calendar::isBusDay(const date& dt)    //ÅĞ¶ÏÊÇ·ñÊÇbusiness day
+Calendar::isBusDay(const date& dt)    //ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½business day
 {
 	if (dt.isWeekDay() == 1)
 	{
@@ -34,7 +34,7 @@ Calendar::isBusDay(const date& dt)    //ÅĞ¶ÏÊÇ·ñÊÇbusiness day
 }
 
 bool
-Calendar::addBusDays(date& dt, int count)    //½«dtÍùºóµÄµÚcount¸öbusiness day¸³Öµ¸ødt
+Calendar::addBusDays(date& dt, int count)    //ï¿½ï¿½dtï¿½ï¿½ï¿½ï¿½Äµï¿½countï¿½ï¿½business dayï¿½ï¿½Öµï¿½ï¿½dt
 {
 	if (dt.year() > 0 && count > 0)
 	{
@@ -44,7 +44,7 @@ Calendar::addBusDays(date& dt, int count)    //½«dtÍùºóµÄµÚcount¸öbusiness day¸³
 		}
 		return SUCCESS;
 	}
-	return FAILURE;    //Õâ¸öÌõ¼şÒ²ÊÇÎÒ²ÂµÄ
+	return FAILURE;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ò²Âµï¿½
 }
 
 bool
@@ -59,7 +59,7 @@ Calendar::addMonths(date& dt, int count)
 		}
 		return SUCCESS;
 	}
-	return FAILURE;    //Õâ¸öÌõ¼şÒ²ÊÇÎÒ²ÂµÄ
+	return FAILURE;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ò²Âµï¿½
 }
 
 bool
@@ -74,7 +74,7 @@ Calendar::addYears(date& dt, int count)
 		}
 		return SUCCESS;
 	}
-	return FAILURE;    //Õâ¸öÌõ¼şÒ²ÊÇÎÒ²ÂµÄ
+	return FAILURE;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ò²Âµï¿½
 }
 
 bool
@@ -85,7 +85,7 @@ Calendar::addHoliday(date& dt)
 		holidays.insert(dt);
 		return SUCCESS;
 	}
-	return FAILURE;    //Õâ¸öÌõ¼şÒ²ÊÇÎÒ²ÂµÄ
+	return FAILURE;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ò²Âµï¿½
 }
 
 bool
@@ -96,14 +96,14 @@ Calendar::removeHoliday(date& dt)
 		holidays.erase(dt);
 		return SUCCESS;
 	}
-	return FAILURE;    //Õâ¸öÌõ¼şÒ²ÊÇÎÒ²ÂµÄ
+	return FAILURE;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ò²Âµï¿½
 }
 
 MMCalendar::MMCalendar(string filename, string mkt) :market(mkt) {
 	ifstream fin(filename.c_str());
 	if (!fin)
 	{
-		cerr << "error: unable to open input file: " << filename << endl;    //ÓÃÓÚ¼ì²éÊÇ·ñ³É¹¦´ò¿ªÎÄ¼ş¡£ÎªÁËÕâÒ»¾äÌØÒâinclude <iostream>£¬ÆäÊµÒ²¿ÉÒÔ²»ÒªÕâÒ»¾ä
+		cerr << "error: unable to open input file: " << filename << endl;    //ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½Ç·ï¿½É¹ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½include <iostream>ï¿½ï¿½ï¿½ï¿½ÊµÒ²ï¿½ï¿½ï¿½Ô²ï¿½Òªï¿½ï¿½Ò»ï¿½ï¿½
 	}
 	int da;
 	string mar;
