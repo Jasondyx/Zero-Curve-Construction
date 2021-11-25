@@ -17,7 +17,7 @@ Calendar::roll(date& dt)
 		}
 		return SUCCESS;
 	}
-	return FAILURE;    //这里什么情况return FAILURE啊
+	return FAILURE;    //这里什么情况return FAILURE啊?
 }
 
 bool
