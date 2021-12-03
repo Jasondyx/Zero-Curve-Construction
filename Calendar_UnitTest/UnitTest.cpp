@@ -63,6 +63,7 @@ namespace UnitTest
 		TEST_CLASS_INITIALIZE(ConstructCurve)
 		{
 			// test class initialization  code
+			pJpy = new MMCalendar("D:\\资料\\学习\\科大\\quantitative C++\\Project\\Project_Calendar\\JPY_Holiday.txt", "JPY");
 			cd.load("D:\\资料\\学习\\科大\\quantitative C++\\Project\\Project_Calendar\\curveData.txt");
 			pCurve = new Curve(cd.currency, cd.baseDate, cd.daysToSpot, pJpy,
 				cd.cash, cd.futures, cd.swaps);

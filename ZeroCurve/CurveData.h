@@ -13,5 +13,6 @@ public:
 	FuturesInput* futures;
 	SwapsInput* swaps;
 public:
+	CurveData();
 	bool load(const char* filename);
 };
