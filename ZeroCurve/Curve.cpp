@@ -34,9 +34,29 @@ Curve::initProcess() {
 
 }
 
+KeyPoints::const_iterator
+Curve::lastKeyPoint(date dt) {
+	KeyPoints::const_iterator iter = firstKeyPoint(), iter_old;
+	while ((*iter).first <= dt && iter != endKeyPoint())
+	{
+		iter_old = iter;
+		iter++;
+	}
+	return iter_old;
+}
+
 double
 Curve::interpolate(date dt) {
-	return 0.0;
+	KeyPoints::const_iterator lastKP = lastKeyPoint(dt), nextKP = next(lastKP);
+	if ((*lastKP).first == dt)
+		return (*lastKP).second;
+	if (nextKP == endKeyPoint())
+	{
+		std::cerr << "Out of range of zero curve." << std::endl;
+		return -1;
+	}
+	DiscountFactorType DF_curr = (*lastKP).second * pow((*nextKP).second / (*lastKP).second, double(julianDate(dt) - (*lastKP).first) / ((*nextKP).first - (*lastKP).first));
+	return DF_curr;
 }
 
 void

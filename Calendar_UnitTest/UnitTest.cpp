@@ -76,6 +76,13 @@ namespace UnitTest
 			Assert::AreEqual(0.998135175, df, 0.00000001);
 		}
 
+		TEST_METHOD(FutureInterpolate)
+		{
+			date d(2009, 3, 16);
+			DiscountFactorType df = pCurve->interpolate(d);
+			Assert::AreEqual(0.981547590541, df, 0.00000001);
+		}
+
 		TEST_METHOD(FirstSwap)
 		{
 			date d(2010, 3, 12);

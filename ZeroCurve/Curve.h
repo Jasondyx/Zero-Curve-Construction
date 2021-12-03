@@ -44,6 +44,7 @@ public:
 	bool insertKeyPoint(date, DiscountFactorType);
 	KeyPoints::const_iterator firstKeyPoint();
 	KeyPoints::const_iterator endKeyPoint() { return m_keyPoints.end(); }
+	KeyPoints::const_iterator lastKeyPoint(date dt);
 	KeyPoint retrieveKeyPoint(KeyPoints::const_iterator);
 	double interpolate(date);		// return 0 if unsuccessful
 
