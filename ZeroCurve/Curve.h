@@ -48,12 +48,10 @@ public:
 	KeyPoint retrieveKeyPoint(KeyPoints::const_iterator);
 	double interpolate(date);		// return 0 if unsuccessful
 
-	void initProcess();
 	void processCash();
 	void processFutures();
 	void processSwaps();
 
-	double processSwapsPoint(int m, double swapsRate);
 	double NPV(double k, int m, double swapsRate);
 	double solve_k(int m, double swapsRate);
 

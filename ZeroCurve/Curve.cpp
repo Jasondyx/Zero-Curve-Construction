@@ -30,10 +30,6 @@ Curve::retrieveKeyPoint(KeyPoints::const_iterator ki) {
 	return *ki;
 }
 
-void
-Curve::initProcess() {
-
-}
 
 KeyPoints::const_iterator
 Curve::lastKeyPoint(date dt) {
@@ -49,7 +45,7 @@ Curve::lastKeyPoint(date dt) {
 double
 Curve::interpolate(date dt) {
 	KeyPoints::const_iterator lastKP = lastKeyPoint(dt), nextKP = next(lastKP);
-	if ((*lastKP).first == dt)  // dt is a keypoint
+	if ((*lastKP).first == dt)  // dt is a keypoint, return the DF directly
 		return (*lastKP).second;
 	if (nextKP == endKeyPoint())
 	{
@@ -63,6 +59,7 @@ Curve::interpolate(date dt) {
 void
 Curve::processCash() {
 	auto iter = m_pCashInput->m_cashPoints.begin();
+	// process ON rate
 	assert((*iter).first == "ON");
 	RateType ON_rate = (*iter).second;
 	auto DateBase = date(m_baseDate / 10000, m_baseDate % 10000 / 100, m_baseDate % 100);
@@ -70,7 +67,7 @@ Curve::processCash() {
 	m_pMMCal->addBusDays(DateON, 1);
 	auto DF_ON = 1.0 / (1.0 + ON_rate * (DateON - DateBase) / 360.0);
 	insertKeyPoint(DateON, DF_ON);  // ON rate
-
+	//process TN rate
 	iter++;
 	assert((*iter).first == "TN");
 	RateType TN_rate = (*iter).second;
@@ -78,7 +75,7 @@ Curve::processCash() {
 	m_pMMCal->addBusDays(DateTN, 1);
 	auto DF_Spot = DF_ON / (1 + TN_rate * (DateTN - DateON) / 360.0);
 	insertKeyPoint(DateTN, DF_Spot);  // TN rate
-
+	//process 3M rate
 	iter++;
 	assert((*iter).first == "3M");
 	RateType M3_rate = (*iter).second;
@@ -96,6 +93,7 @@ Curve::processFutures() {
 	date Date3M = date(DateBase);
 	m_pMMCal->addBusDays(Date3M, m_daysToSpot);
 	m_pMMCal->addMonths(Date3M, 3);
+	// use the formula to solve the DF of first and second future date
 	auto Price_1Future = m_pFuturesInput->m_futuresPoints[0].second, Price_2Future = m_pFuturesInput->m_futuresPoints[1].second;
 	auto Date_1Future_l = m_pFuturesInput->m_futuresPoints[0].first, Date_2Future_l = m_pFuturesInput->m_futuresPoints[1].first;
 	date Date_1Future = date(Date_1Future_l / 10000, Date_1Future_l % 10000 / 100, Date_1Future_l % 100);
@@ -109,6 +107,7 @@ Curve::processFutures() {
 
 	for (auto iter = m_pFuturesInput->m_futuresPoints.begin(); iter != m_pFuturesInput->m_futuresPoints.end(); iter++)
 	{
+		// iteratively use the future points to extend the keypoints list
 		auto currDate_l = (*iter).first;
 		date currDate = date(currDate_l / 10000, currDate_l % 10000 / 100, currDate_l % 100);
 		date nextDate = date(currDate);
@@ -125,6 +124,7 @@ Curve::processFutures() {
 double
 Curve::solve_k(int m, double swapsRate)
 {
+	// solve the k value letting NPV=0
 	double k1 = 0.9, k2 = 1, k3;
 	auto temp1 = NPV(k1, m, swapsRate), temp2 = NPV(k2, m, swapsRate);
 	assert(NPV(k1, m, swapsRate) < 0);
@@ -171,19 +171,10 @@ Curve::NPV(double k, int m, double swapsRate)
 		}
 		date_t_last = date_t;
 	}
-	NPV += 100 * DF_t;
+	NPV += 100 * DF_t;  // add the principle value at the end
 	return NPV;
 }
 
-//double
-//Curve::processSwapsPoint(int m, double swapsRate)
-//{
-//	date dateBase = date(m_baseDate / 10000, m_baseDate % 10000 / 100, m_baseDate % 100), date_t;
-//	date date_endKP = (date)(*(prev(endKeyPoint()))).first;
-//	double k;
-//	k = solve_k(m, swapsRate);
-//	return k;
-//}
 
 void
 Curve::processSwaps() {
@@ -195,18 +186,18 @@ Curve::processSwaps() {
 	DiscountFactorType DF_t;
 	for (auto iter = m_pSwapsInput->m_swapsPoints.begin(); iter != m_pSwapsInput->m_swapsPoints.end(); iter++)
 	{
-		matureYear = std::stoi((*iter).first.substr(0, (*iter).first.find('Y')));
+		matureYear = std::stoi((*iter).first.substr(0, (*iter).first.find('Y')));  // get the mature year
 		assert(m_pSwapsInput->m_swapsFreq == "Semi-Annually");
 		
-		k = solve_k(matureYear, (*iter).second);
+		k = solve_k(matureYear, (*iter).second);  // solve the factor k using bisection method
 		for (int i = 1; i <= matureYear * 2; i++)
 		{
 			date_t = date(dateBase);
 			m_pMMCal->addMonths(date_t, 6*i);
 			date_endKP = (date) (*(prev(endKeyPoint()))).first;
-			if (date_t <= date_endKP) continue;
+			if (date_t <= date_endKP) continue;  // skip the date where previous keypoints have covered
 			DF_t = m_keyPoints[date_endKP] * pow(k, date_t - date_endKP);
-			insertKeyPoint(date_t, DF_t);
+			insertKeyPoint(date_t, DF_t);  // assign value to keypoints
 		}
 	}
 }
