@@ -12,9 +12,10 @@ using std::ofstream;
 
 const char* MONTH[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
+//Constructor
 CurveData::CurveData() {
-	currency = new char[100];
-	holidayCenter = new char[100];
+	currency = new char[256];
+	holidayCenter = new char[256];
 	cash = new CashInput();
 	futures = new FuturesInput();
 	swaps = new SwapsInput();
@@ -23,7 +24,7 @@ CurveData::CurveData() {
 bool
 CurveData::load(const char* filename) {
 	ifstream fin(filename);
-	if (!fin)
+	if (!fin)    //Examine if the file has been successfully opened.Return false if not
 	{
 		cerr << "error: unable to open input file: " << filename << endl;
 		return false;
@@ -32,8 +33,7 @@ CurveData::load(const char* filename) {
 
 	//currency
 	getline(fin, line1, ',');
-	getline(fin, line2);
-	currency = (char*)line2.c_str();
+	fin.getline(currency, 256);
     
 	//baseDate
 	int day = 0;
@@ -80,8 +80,7 @@ CurveData::load(const char* filename) {
 
 	//holidayCenter
 	getline(fin, line1, ',');
-	getline(fin, line2);
-	holidayCenter = (char*)line2.c_str();
+	fin.getline(holidayCenter, 256);
 
 	//cashPoints, futuresPoints, swapsPoints
 	CashMaturityType cmt;       //Used to record CashMaturityType 
@@ -94,7 +93,7 @@ CurveData::load(const char* filename) {
 		{
 			getline(fin, cmt, ',');
 			fin >> rOrt;
-			getline(fin, line1);
+			getline(fin, line1);    //The purpose of this statement is to skip the "\n" in this line, since fin >> rOrt will stop before "\n" instead of skipping it
 			CashPoint cp(cmt, rOrt);
 			cash->m_cashPoints.push_back(cp);
 			continue;
@@ -118,7 +117,7 @@ CurveData::load(const char* filename) {
 			}
 			fmt = year * 10000 + month * 100 + day;
 			fin >> rOrt;
-			getline(fin, line1);
+			getline(fin, line1);    //The purpose of this statement is to skip the "\n" in this line, since fin >> rOrt will stop before "\n" instead of skipping it
 			FuturesPoint fp(fmt, rOrt);
 			futures->m_futuresPoints.push_back(fp);
 			continue;
@@ -127,7 +126,7 @@ CurveData::load(const char* filename) {
 		{
 			getline(fin, smt, ',');
 			fin >> rOrt;
-			getline(fin, line1);
+			getline(fin, line1);    //The purpose of this statement is to skip the "\n" in this line, since fin >> rOrt will stop before "\n" instead of skipping it
 			SwapsPoint sp(smt, rOrt);
 			swaps->m_swapsPoints.push_back(sp);
 		}
