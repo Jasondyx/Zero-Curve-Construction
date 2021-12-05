@@ -53,6 +53,10 @@ public:
 	void processFutures();
 	void processSwaps();
 
+	double processSwapsPoint(int m, double swapsRate);
+	double NPV(double k, int m, double swapsRate);
+	double solve_k(int m, double swapsRate);
+
 };
 
 class __declspec(dllexport) SwapsCashFlow {
